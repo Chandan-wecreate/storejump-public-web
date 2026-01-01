@@ -1,0 +1,21 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+
+steps:
+- task: vercel-deployment-task@1
+  name: 'Deploy'
+  inputs:
+    vercelProjectId: ''
+    vercelOrgId: ''
+    vercelToken: $(VERCEL_TOKEN)
+    production: $(isMain)
+- task: vercel-azdo-pr-comment-task@1
+  inputs:
+    azureToken: $(AZURE_TOKEN)
+    deploymentTaskMessage: $(Deploy.deploymentTaskMessage)

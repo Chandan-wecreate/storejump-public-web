@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+:root {
+  overflow: hidden;
+
+  --cardTitleTop: 0px;
+
+  --background: #ffffff;
+  --foreground: #fff;
+  --themePrimary: #2565FF;
+  --antiFlashWhite: #F1F1F1;
+  --darkJungleGreen: #161C28;
+  --quickSilver: #A6A6A6;
+  --border: #FFFFFF33;
+  --grey: #555555;
+  --themeBlack: #191A15;
+  --themeSecondary: #D8E4FB;
+  --green: #A3EFD2;
+  --purple: #B7CCFF;
+  --orange: #FFD7A6;
+  --pink: #E0B9D8;
+  --lightPink: #FFBBBC;
+  --azureishWhite: #DBE5FA;
+  --brightGrey: #EAEAEA;
+  --semiTransparentBlack: #0000000D;
+  --ghostWhite: #F9F8FE;
+  --oceanGreen: #54BD95;
+  --cosmos: #1E293B;
+  --blueHaze: #A0A3BD;
+  --alpineWhite: #E9EFFF;
+  --alexandra: #3B82F6;
+  --silver: #BABABB;
+  --lightBabyPink: #FFD6D6;
+  --seashellBlue: #E5EEFF;
+  --lighBlue: #B5CBFF;
+  --paleSnow: #F1F2F9;
+  --royalPastelBlue: #D9DBE9;
+  --solitude: #E8F0FF;
+}
+
+@theme inline {
+  /* Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-themePrimary: var(--themePrimary);
+  --color-antiFlashWhite: var(--antiFlashWhite);
+  --color-darkJungleGreen: var(--darkJungleGreen);
+  --color-quickSilver: var(--quickSilver);
+  --color-border: var(--border);
+  --color-grey: var(--grey);
+  --color-themeSecondary: var(--themeSecondary);
+  --color-green: var(--green);
+  --color-purple: var(--purple);
+  --color-orange: var(--orange);
+  --color-pink: var(--pink);
+  --color-lightPink: var(--lightPink);
+  --color-azureishWhite: var(--azureishWhite);
+  --color-brightGrey: var(--brightGrey);
+  --color-semiTransparentBlack: var(--semiTransparentBlack);
+  --color-ghostWhite: var(--ghostWhite);
+  --color-oceanGreen: var(--oceanGreen);
+  --color-cosmos: var(--cosmos);
+  --color-blueHaze: var(--blueHaze);
+  --color-alpineWhite: var(--alpineWhite);
+  --color-alexandra: var(--alexandra);
+  --color-silver: var(--silver);
+  --lightBabyPink: var(--lightBabyPink);
+  --color-seashellBlue: var(--seashellBlue);
+  --color-lighBlue: var(--lighBlue);
+  --color-paleSnow: var(--paleSnow);
+  --color-royalPastelBlue: var(--royalPastelBlue);
+  --color-solitude: var(--solitude);
+
+  /* Fonts */
+  --font-sans: var(--font-inter-sans);
+
+  /* Breakpoints */
+  --breakpoint-hd: 1367px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #fff;
+    --foreground: #ededed;
+  }
+}
+
+@layer utilities {
+  .card-title-transition {
+    transition: top 0.3s ease, text-shadow 0.3s ease, position 0.3s ease;
+    top: var(--cardTitleTop, 0px);
+  }
+
+  .box-shadow-semiTransparentBlack {
+    box-shadow: 0px 4px 9px 0px var(--color-semiTransparentBlack);
+  }
+
+  .glass-gradient-80 {
+    backdrop-filter: blur(250px);
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(59, 130, 246, 0.2) 100%);
+  }
+
+  .custom-bg-gradient {
+    background: linear-gradient(90deg, rgba(200, 229, 250, 1) 0%, rgba(200, 229, 250, 1) 60%, rgba(5, 177, 105, 0.25) 100%);
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--cosmos);
+  font-family: var(--font-inter-sans), sans-serif;
+  overflow: hidden;
+}
+
+/* Fast CSS animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause on hover */
+.css-ticker:hover .sliderTrack,
+.responsive-ticker:hover .sliderTrack {
+  animation-play-state: paused !important;
+}
+
+/* Edge fade effects when animating */
+.css-ticker:has(.sliderTrack[animation*="scroll"])::before,
+.css-ticker:has(.sliderTrack[animation*="scroll"])::after,
+.responsive-ticker:has(.sliderTrack[animation*="scroll"])::before,
+.responsive-ticker:has(.sliderTrack[animation*="scroll"])::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.css-ticker:has(.sliderTrack[animation*="scroll"])::before,
+.responsive-ticker:has(.sliderTrack[animation*="scroll"])::before {
+  left: 0;
+  background: linear-gradient(to right, var(--background) 0%, transparent 100%);
+}
+
+.css-ticker:has(.sliderTrack[animation*="scroll"])::after,
+.responsive-ticker:has(.sliderTrack[animation*="scroll"])::after {
+  right: 0;
+  background: linear-gradient(to left, var(--background) 0%, transparent 100%);
+}

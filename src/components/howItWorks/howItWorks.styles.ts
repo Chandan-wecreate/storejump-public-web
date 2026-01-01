@@ -1,0 +1,21 @@
+const howItWorksStyles = {
+    wrapper: "py-10 lg:py-[70px] grid lg:gap-[30px] gap-5",
+    infoGrid: "grid pr-[30px] lg:pr-0",
+    infoTitle: "text-black text-[34px] font-bold",
+    textGrey: "text-grey",
+    cardsWrapper: "grid grid-cols-3 gap-[30px] lg:gap-[45px]",
+    card: "grid auto-rows-auto gap-[30px] self-start",
+    imageWrapper: "lg:px-5 rounded-[20px] bg-ghostWhite items-start will-change-[height_,_opacity] overflow-hidden transition-[height,opacity] duration-300 ease-out card-img relative w-full lg:h-[300px] xl:h-[400px] md:h-[200px] md:p-[15px]",
+    img: "w-full h-full",
+    cardInfoWrapper: "grid auto-rows-auto gap-2.5 lg:gap-[15px]",
+    cardTitle: (isMobile = false) => `${isMobile ? "opacity-0 hidden" : ""} text-lg lg:text-2xl font-semibold card-content top-[var(--cardTitleTop)]`,
+    cardDescription: "text-grey text-sm card-desc",
+    mobileWrapper: "relative overflow-hidden w-full select-none",
+    carousel: "flex gap-[30px] transition-transform duration-300 ease-in-out cursor-grab",
+    carouselItem: "border border-brightGrey px-[30px] py-[30px] overflow-hidden rounded-[20px] bg-ghostWhite card-root flex flex-col gap-5 relative md:rounded-3xl rounded-xl w-full h-auto md:w-[calc(50%_-_15px)] lg:w-[calc(50%_-_25px)] shadow-cardShadow shadow-blackTrans8",
+    animationBase: "will-change-transform transition-[opacity,transform,translate] duration-1000 ease-out",
+    animationHidden: "opacity-0 -translate-x-10",
+    animationVisible: "opacity-100 translate-x-0",
+};
+
+export default howItWorksStyles;
