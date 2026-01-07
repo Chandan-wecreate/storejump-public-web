@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 import Container from "@/components/container/container";
@@ -29,10 +29,17 @@ const menuItems = [
     }
 ];
 
+const MENU_ITEM_STAGGER_DELAY_MS = 80;
+const MENU_ITEM_START_DELAY_MS = 2500;
+
 const Header = memo(() => {
     const [isActive, setIsActive] = useState(false);
     const breakpoints = useBreakpoints();
     const [scrolled, setScrolled] = useState(false);
+    const [animateDesktopMenu, setAnimateDesktopMenu] = useState(false);
+    const [animateMobileMenuItems, setAnimateMobileMenuItems] = useState(false);
+
+    const menuItemBaseDelayMs = useMemo(() => MENU_ITEM_STAGGER_DELAY_MS, []);
 
     useEffect(() => {
         const container = document.getElementsByClassName("main-wrapper")[0];
@@ -51,15 +58,36 @@ const Header = memo(() => {
         return () => container.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        const timeoutId = setTimeout(() => setAnimateDesktopMenu(true), MENU_ITEM_START_DELAY_MS);
+        return () => clearTimeout(timeoutId);
+    }, []);
+
+    useEffect(() => {
+        if (!isActive) return;
+
+        const timeoutId = setTimeout(() => setAnimateMobileMenuItems(true), MENU_ITEM_START_DELAY_MS);
+        return () => clearTimeout(timeoutId);
+    }, [isActive]);
+
     const toggleMenu = useCallback(() => {
-        setIsActive(prev => !prev);
+        setIsActive((prev) => {
+            const next = !prev;
+            if (!next) {
+                setAnimateMobileMenuItems(false);
+            }
+            return next;
+        });
     }, []);
 
     useEffect(() => {
         // Close mobile menu on desktop breakpoint
         if (!breakpoints.LG && isActive) {
             // Async state update to avoid React's synchronous effect warning
-            queueMicrotask(() => setIsActive(false));
+            queueMicrotask(() => {
+                setIsActive(false);
+                setAnimateMobileMenuItems(false);
+            });
         }
     }, [breakpoints.LG, isActive]);
 
@@ -80,7 +108,14 @@ const Header = memo(() => {
                             {
                                 menuItems.map((item, index) =>
                                     <Link href={item.href} className={commonStyles.link(true)} key={index}>
-                                        {item.title}
+                                        <span
+                                            className={`${styles.menuItemAnimationBase} ${
+                                                animateDesktopMenu ? styles.menuItemVisible : styles.menuItemPreVisible
+                                            }`}
+                                            style={{ transitionDelay: `${index * menuItemBaseDelayMs}ms` }}
+                                        >
+                                            {item.title}
+                                        </span>
                                     </Link>
                                 )
                             }
@@ -105,7 +140,18 @@ const Header = memo(() => {
                     {
                         menuItems.map((item, index) =>
                             <Link href={item.href} className={commonStyles.link(true)} key={index}>
-                                {item.title}
+                                <span
+                                    className={`${styles.menuItemAnimationBase} ${
+                                        isActive
+                                            ? animateMobileMenuItems
+                                                ? styles.menuItemVisible
+                                                : styles.menuItemPreVisible
+                                            : styles.menuItemHidden
+                                    }`}
+                                    style={{ transitionDelay: `${index * menuItemBaseDelayMs}ms` }}
+                                >
+                                    {item.title}
+                                </span>
                             </Link>
                         )
                     }

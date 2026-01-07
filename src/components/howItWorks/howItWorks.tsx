@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback } from "react";
+import { memo, useCallback, useMemo, useRef } from "react";
 
 import CardStack from "@/components/cardStack/cardStack";
 import Container from "@/components/container/container";
@@ -8,53 +8,59 @@ import Heading from "@/components/heading/heading";
 import ICardSectionData from "@/types/ICardSectionData";
 import ImageComponent from "@/components/imageComponent/imageComponent";
 import useBreakpoints from "@/hooks/useBreakpoints";
-import useInView from "@/hooks/useInView";
+import usePinnedStaggerReveal from "@/hooks/usePinnedStaggerReveal";
 
 import styles from "@/components/howItWorks/howItWorks.styles";
 
-const CARD_STAGGER_DELAY_MS = 1000;
+const HOW_IT_WORKS_SCROLL_PER_ITEM_PX = 420;
+const HOW_IT_WORKS_CARD_STAGGER = 1;
+const HOW_IT_WORKS_CARD_FROM_Y = 36;
 
 const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
     const { card, heading } = cardSection;
     const breakpoints = useBreakpoints();
     const isMobile = breakpoints.MD;
-    const { ref: sectionRef, inView } = useInView<HTMLDivElement>();
+    const sectionRef = useRef<HTMLDivElement>(null);
 
-    const animationStateClass = inView
-        ? styles.animationVisible
-        : styles.animationHidden;
+    usePinnedStaggerReveal(sectionRef, {
+        enabled: !isMobile,
+        itemSelector: "[data-howitworks-card]",
+        scrollPerItemPx: HOW_IT_WORKS_SCROLL_PER_ITEM_PX,
+        stagger: HOW_IT_WORKS_CARD_STAGGER,
+        fromVars: { y: HOW_IT_WORKS_CARD_FROM_Y },
+        toVars: { y: 0 },
+    });
 
-    const animatedClassName = `${styles.animationBase} ${animationStateClass}`;
+    const cardWrapperClassName = useMemo(
+        () => !isMobile ? styles.scrollCard : "",
+        [isMobile]
+    );
 
-    const renderCard = useCallback((mobile: boolean) => card.map((c, idx) => {
-        const cardDelayMs = idx * CARD_STAGGER_DELAY_MS;
-
-        return (
-            <div
-                key={idx}
-                className={animatedClassName}
-                style={{ transitionDelay: `${cardDelayMs}ms` }}
-            >
-                <div className={mobile ? styles.carouselItem : styles.card}>
-                    <div className={styles.imageWrapper}>
-                        <ImageComponent {...c.img} className={styles.img} />
-                    </div>
-                    <div className={styles.cardInfoWrapper}>
-                        {mobile
-                            ? <>
-                                <h3 className={styles.cardTitle(false)}>{c.title}</h3>
-                                <h3 className={`${styles.cardTitle(isMobile)}`}>
-                                    {c.title}
-                                </h3>
-                            </>
-                            : <span className={styles.cardTitle(false)}>{c.title}</span>
-                        }
-                        <span className={styles.cardDescription}>{c.description}</span>
-                    </div>
+    const renderCard = useCallback((mobile: boolean) => card.map((c, idx) =>
+        <div
+            key={idx}
+            data-howitworks-card
+            className={cardWrapperClassName}
+        >
+            <div className={mobile ? styles.carouselItem : styles.card}>
+                <div className={styles.imageWrapper}>
+                    <ImageComponent {...c.img} className={styles.img} />
+                </div>
+                <div className={styles.cardInfoWrapper}>
+                    {mobile
+                        ? <>
+                            <h3 className={styles.cardTitle(false)}>{c.title}</h3>
+                            <h3 className={`${styles.cardTitle(isMobile)}`}>
+                                {c.title}
+                            </h3>
+                        </>
+                        : <span className={styles.cardTitle(false)}>{c.title}</span>
+                    }
+                    <span className={styles.cardDescription}>{c.description}</span>
                 </div>
             </div>
-        );
-    }), [animatedClassName, card, isMobile]);
+        </div>
+    ), [card, cardWrapperClassName, isMobile]);
 
     return (
         <Container>

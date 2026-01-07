@@ -1,5 +1,5 @@
 const homeStyles = {
-    innerSection: "pb-[60px]",
+    innerSection: "pb-[60px] bg-white",
 };
 
 export default homeStyles;

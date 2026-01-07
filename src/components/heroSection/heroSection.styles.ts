@@ -9,10 +9,14 @@ const heroSectionStyles = {
     featureWrapper: "flex gap-[30px] lg:justify-center",
     feature: "flex items-center justify-center gap-2.5 text-xs lg:text-lg",
     featureImg: "lg:w-5 lg:h-5 w-[15px] h-[15px]",
-    contentAnimationBase: "will-change-transform transition-[opacity,transform,translate] duration-700 ease-out",
-    contentAnimationHidden: "opacity-0 -translate-x-10",
+
+    // Animations
+    contentAnimationBase:
+        "transform-gpu will-change-transform transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none motion-reduce:transform-none",
+    contentAnimationHidden: "opacity-0 -translate-x-6 motion-reduce:opacity-100",
     contentAnimationVisible: "opacity-100 translate-x-0",
-    heroImageAnimationHidden: "opacity-0 translate-x-10",
+
+    heroImageAnimationHidden: "opacity-0 translate-x-6 motion-reduce:opacity-100",
     heroImageAnimationVisible: "opacity-100 translate-x-0",
 };
 

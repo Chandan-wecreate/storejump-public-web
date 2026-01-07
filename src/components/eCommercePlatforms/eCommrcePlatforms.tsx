@@ -17,7 +17,11 @@ const STAGGER_DELAY_MS = 90;
 const ECommercePlatforms = memo((props: ICardSectionData) => {
     const { cardSection } = props;
     const [rightSpacing, setRightSpacing] = useState(0);
-    const { ref: sectionRef, inView: hasEnteredView } = useInView<HTMLDivElement>();
+    const { ref: sectionRef, inView: cardsInView } = useInView<HTMLDivElement>({ once: false });
+    const { ref: headingRef, inView: headingInView } = useInView<HTMLDivElement>({
+        once: false,
+        rootMargin: "0px 0px 0px 0px",
+    });
 
     useLayoutEffect(() => {
         const updateSpacing = () => {
@@ -37,11 +41,19 @@ const ECommercePlatforms = memo((props: ICardSectionData) => {
     return (
         <Container>
             <div className={styles.wrapper} ref={sectionRef}>
-                <Heading highlightedText={cardSection.heading.highlightedText} title={cardSection.heading.title} />
+                <div
+                    ref={headingRef}
+                    className={
+                        `${styles.cardAnimationBase} ${headingInView ? styles.cardAnimationVisible : styles.cardAnimationHidden
+                        }`
+                    }
+                >
+                    <Heading highlightedText={cardSection.heading.highlightedText} title={cardSection.heading.title} />
+                </div>
                 <div className={styles.carouselWrapper} style={{ marginRight: `-${rightSpacing}px` }}>
                     <Carousel>
                         {cardSection.card.map((card, index) => {
-                            const animationStateClass = hasEnteredView
+                            const animationStateClass = cardsInView
                                 ? styles.cardAnimationVisible
                                 : styles.cardAnimationHidden;
 

@@ -13,9 +13,12 @@ import useInView from "@/hooks/useInView";
 import styles from "@/components/heroSection/heroSection.styles";
 
 const STAGGER_DELAY_MS = 110;
-const STAGGER_1 = 1;
-const STAGGER_2 = 2;
-const STAGGER_3 = 3;
+
+// Order of entrance (keep tight for conversion)
+const STAGGER_BUTTON = 1;
+const STAGGER_PLATFORMS = 2;
+const STAGGER_FEATURES_START = 3;
+const STAGGER_HERO_IMAGE = 2;
 
 const HeroSection = memo((props: IHeroSectionProps) => {
     const { ref: sectionRef, inView: hasEnteredView } = useInView<HTMLDivElement>();
@@ -46,55 +49,59 @@ const HeroSection = memo((props: IHeroSectionProps) => {
                         />
                     </div>
 
-                    <div
-                        className={animatedClassName}
-                        style={{ transitionDelay: `${STAGGER_DELAY_MS}ms` }}
-                    >
-                        <div className={styles.buttonWrapper}>
-                            <ThemeButton title={props.buttonText || ""} primary />
-                        </div>
-                    </div>
-
-                    {props.platforms &&
+                    {props.buttonText && (
                         <div
                             className={animatedClassName}
-                            style={{ transitionDelay: `${STAGGER_DELAY_MS * STAGGER_2}ms` }}
+                            style={{ transitionDelay: `${STAGGER_DELAY_MS * STAGGER_BUTTON}ms` }}
+                        >
+                            <div className={styles.buttonWrapper}>
+                                <ThemeButton title={props.buttonText} primary />
+                            </div>
+                        </div>
+                    )}
+
+                    {props.platforms && (
+                        <div
+                            className={animatedClassName}
+                            style={{ transitionDelay: `${STAGGER_DELAY_MS * STAGGER_PLATFORMS}ms` }}
                         >
                             <ImageTicker images={props.platforms.images} />
                         </div>
-                    }
+                    )}
 
-                    {props.features &&
-                        <div
-                            className={animatedClassName}
-                            style={{ transitionDelay: `${STAGGER_DELAY_MS * STAGGER_3}ms` }}
-                        >
-                            <div className={styles.featureWrapper}>
-                                {props.features.map((item, index) =>
-                                    <div key={index} className={styles.feature}>
-                                        <ImageComponent
-                                            url="/images/icons/check.svg"
-                                            alternativeText="check-icon"
-                                            width={0}
-                                            height={0}
-                                            className={styles.featureImg}
-                                            staticImage
-                                        />
-                                        {item.feature}
-                                    </div>
-                                )}
-                            </div>
+                    {!!props.features?.length && (
+                        <div className={styles.featureWrapper}>
+                            {props.features.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className={`${animatedClassName} ${styles.feature}`}
+                                    style={{
+                                        transitionDelay: `${STAGGER_DELAY_MS * (STAGGER_FEATURES_START + index)}ms`,
+                                    }}
+                                >
+                                    <ImageComponent
+                                        url="/images/icons/check.svg"
+                                        alternativeText="check-icon"
+                                        width={0}
+                                        height={0}
+                                        className={styles.featureImg}
+                                        staticImage
+                                    />
+                                    {item.feature}
+                                </div>
+                            ))}
                         </div>
-                    }
+                    )}
                 </div>
 
                 {props.heroImg && (() => {
                     const heroImgWrapperClass = styles.heroImgWrapper(props.hideImgOnMobile);
                     const heroImgClassName = `${heroImgWrapperClass} ${heroImageAnimatedClassName}`;
+
                     return (
                         <div
                             className={heroImgClassName}
-                            style={{ transitionDelay: `${STAGGER_DELAY_MS * STAGGER_1}ms` }}
+                            style={{ transitionDelay: `${STAGGER_DELAY_MS * STAGGER_HERO_IMAGE}ms` }}
                         >
                             <ImageComponent {...props.heroImg} className={styles.imageWrapper} />
                         </div>

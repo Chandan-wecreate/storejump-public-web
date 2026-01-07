@@ -13,11 +13,16 @@ import useInView from "@/hooks/useInView";
 import styles from "@/components/scheduleDemo/scheduleDemo.styles";
 
 const STAGGER_DELAY_MS = 110;
+const SCHEDULE_DEMO_IN_VIEW_ROOT_MARGIN = "0px";
+const SCHEDULE_DEMO_IN_VIEW_THRESHOLD = 0.4;
 
 const ScheduleDemo = memo((props: IScheduleDemoProps) => {
     const { heading } = props;
     const breakpoints = useBreakpoints();
-    const { ref: sectionRef, inView } = useInView<HTMLDivElement>();
+    const { ref: sectionRef, inView } = useInView<HTMLDivElement>({
+        rootMargin: SCHEDULE_DEMO_IN_VIEW_ROOT_MARGIN,
+        threshold: SCHEDULE_DEMO_IN_VIEW_THRESHOLD,
+    });
 
     const rightAnimationState = inView
         ? styles.animationVisible
