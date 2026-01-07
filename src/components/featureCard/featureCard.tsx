@@ -11,7 +11,9 @@ import styles from "@/components/featureCard/featureCard.styles";
 const FEATURE_CARD_STAGGER_DELAY_MS = 120;
 
 const FeatureCard = memo((props: IFeatureCardProps) => {
-    const { ref: firstCardRef, inView } = useInView<HTMLDivElement>();
+    const { ref: firstCardRef, inView } = useInView<HTMLDivElement>({
+        rootMargin: "0px 0px -40% 0px",
+    });
 
     const animationStateClass = inView
         ? styles.animationVisible
