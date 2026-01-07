@@ -8,6 +8,7 @@ import Heading from "@/components/heading/heading";
 import ICardSectionData from "@/types/ICardSectionData";
 import ImageComponent from "@/components/imageComponent/imageComponent";
 import useBreakpoints from "@/hooks/useBreakpoints";
+import useInView from "@/hooks/useInView";
 import usePinnedStaggerReveal from "@/hooks/usePinnedStaggerReveal";
 
 import styles from "@/components/howItWorks/howItWorks.styles";
@@ -21,6 +22,11 @@ const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
     const breakpoints = useBreakpoints();
     const isMobile = breakpoints.MD;
     const sectionRef = useRef<HTMLDivElement>(null);
+
+    const { ref: headingRef, inView: headingInView } = useInView<HTMLDivElement>({
+        once: false,
+        rootMargin: "0px 0px 0px 0px",
+    });
 
     usePinnedStaggerReveal(sectionRef, {
         enabled: !isMobile,
@@ -66,7 +72,15 @@ const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
         <Container>
             <div className={styles.wrapper} ref={sectionRef}>
                 <div className={styles.infoGrid}>
-                    <Heading highlightedText={heading.highlightedText} title={heading.title} />
+                    <div
+                        ref={headingRef}
+                        className={`
+                            ${styles.animationBase} 
+                            ${headingInView ? styles.animationVisible : styles.animationHidden}`
+                        }
+                    >
+                        <Heading highlightedText={heading.highlightedText} title={heading.title} />
+                    </div>
                 </div>
                 {
                     isMobile

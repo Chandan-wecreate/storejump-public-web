@@ -15,14 +15,23 @@ import styles from "@/components/scheduleDemo/scheduleDemo.styles";
 const STAGGER_DELAY_MS = 110;
 const SCHEDULE_DEMO_IN_VIEW_ROOT_MARGIN = "0px";
 const SCHEDULE_DEMO_IN_VIEW_THRESHOLD = 0.4;
+const SCHEDULE_DEMO_MOBILE_IN_VIEW_THRESHOLD = 0;
 
 const ScheduleDemo = memo((props: IScheduleDemoProps) => {
     const { heading } = props;
     const breakpoints = useBreakpoints();
+    const isMobile = breakpoints.MD;
     const { ref: sectionRef, inView } = useInView<HTMLDivElement>({
         rootMargin: SCHEDULE_DEMO_IN_VIEW_ROOT_MARGIN,
-        threshold: SCHEDULE_DEMO_IN_VIEW_THRESHOLD,
+        threshold: isMobile ? SCHEDULE_DEMO_MOBILE_IN_VIEW_THRESHOLD : SCHEDULE_DEMO_IN_VIEW_THRESHOLD,
     });
+
+    const headingAnimationState = inView
+        ? styles.animationVisible
+        : styles.animationLeftHidden;
+    const headingAnimatedClassName = isMobile
+        ? `${styles.animationBase} ${headingAnimationState}`
+        : "";
 
     const rightAnimationState = inView
         ? styles.animationVisible
@@ -35,7 +44,7 @@ const ScheduleDemo = memo((props: IScheduleDemoProps) => {
                 ? <div className={styles.containerBg}>
                     <Container>
                         <div className={styles.wrapper(props.fullWidth)} ref={sectionRef}>
-                            <div className={`${styles.flexCenter} ${styles.flex1}`}>
+                            <div className={`${styles.flexCenter} ${styles.flex1} ${headingAnimatedClassName}`}>
                                 <Heading
                                     highlightedText={heading.highlightedText}
                                     title={heading.title}
@@ -63,7 +72,7 @@ const ScheduleDemo = memo((props: IScheduleDemoProps) => {
                 </div>
                 : <Container>
                     <div className={styles.wrapper(props.fullWidth)} ref={sectionRef}>
-                        <div className={`${styles.flexCenter} ${styles.flex1}`}>
+                        <div className={`${styles.flexCenter} ${styles.flex1} ${headingAnimatedClassName}`}>
                             <Heading
                                 highlightedText={heading.highlightedText}
                                 title={heading.title}
