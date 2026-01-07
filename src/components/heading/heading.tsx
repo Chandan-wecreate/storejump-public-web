@@ -45,7 +45,7 @@ const AnimatedHighlightedText = memo(({ text }: { text: string }) => {
     );
 });
 
-const DelayedLongDescription = memo(({ text }: { text: string }) => {
+const DelayedDescription = memo(({ text, isLong }: { text: string; isLong?: boolean }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [measuredMaxHeight, setMeasuredMaxHeight] = useState("0px");
     const paragraphRef = useRef<HTMLParagraphElement>(null);
@@ -71,7 +71,7 @@ const DelayedLongDescription = memo(({ text }: { text: string }) => {
     return (
         <p
             ref={paragraphRef}
-            className={`${styles.description(false, false)} ${styles.longDescriptionTransition} ${isVisible ? "opacity-100" : "opacity-0"}`}
+            className={`${styles.description(false, !isLong)} ${styles.longDescriptionTransition} ${isVisible ? "opacity-100" : "opacity-0"}`}
             style={{ maxHeight: isVisible ? measuredMaxHeight : "0px" }}
         >
             {text}
@@ -121,12 +121,8 @@ const Heading = memo((props: IHeadingProps) => {
             <h3 className={styles.heading(primary)}>
                 {formattedTitle}
             </h3>
-            {description &&
-                <p className={`${styles.description(primary, longDescription ? true : false)} ${descriptionClassName ?? ""}`}>
-                    {description}
-                </p>
-            }
-            {longDescription && <DelayedLongDescription key={longDescription} text={longDescription} />}
+            {description && <DelayedDescription key={description} text={description} />}
+            {longDescription && <DelayedDescription key={longDescription} text={longDescription} isLong />}
         </div>
     );
 });
