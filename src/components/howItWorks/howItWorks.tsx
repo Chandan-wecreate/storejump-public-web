@@ -13,8 +13,8 @@ import useInView from "@/hooks/useInView";
 
 import styles from "@/components/howItWorks/howItWorks.styles";
 
-const HOW_IT_WORKS_REVEAL_STAGGER = 1;
-const HOW_IT_WORKS_REVEAL_DURATION = 0.75;
+const HOW_IT_WORKS_REVEAL_STAGGER = 0.7;
+const HOW_IT_WORKS_REVEAL_DURATION = 0.5;
 const HOW_IT_WORKS_REVEAL_FROM_Y = 14;
 
 const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
@@ -88,7 +88,7 @@ const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
                         ? <>
                             <h3 className={styles.cardTitle(false)}>{c.title}</h3>
                             <h3 className={`${styles.cardTitle(isMobile)}`}>
-                                {c.title}
+                                {c.title}123
                             </h3>
                         </>
                         : <span className={styles.cardTitle(false)}>{c.title}</span>

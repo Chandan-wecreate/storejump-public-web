@@ -49,6 +49,7 @@ const ScheduleDemo = memo((props: IScheduleDemoProps) => {
                                     highlightedText={heading.highlightedText}
                                     title={heading.title}
                                     description={heading.description}
+                                    noTransition
                                 />
                             </div>
                             <div

@@ -12,11 +12,12 @@ const heroSectionStyles = {
 
     // Animations
     contentAnimationBase:
-        "transform-gpu will-change-transform transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none motion-reduce:transform-none",
-    contentAnimationHidden: "opacity-0 -translate-x-6 motion-reduce:opacity-100",
+        "transform-gpu will-change-transform transition-[opacity,translate] duration-700 ease-out",
+    contentAnimationHidden: "opacity-0 -translate-x-6 motion-reduce:opacity-100 motion-reduce:translate-x-0",
     contentAnimationVisible: "opacity-100 translate-x-0",
 
-    heroImageAnimationHidden: "opacity-0 translate-x-6 motion-reduce:opacity-100",
+    heroImageAnimationHidden:
+        "opacity-0 translate-x-6 motion-reduce:opacity-100 motion-reduce:translate-x-0",
     heroImageAnimationVisible: "opacity-100 translate-x-0",
 };
 
