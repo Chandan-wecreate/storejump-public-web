@@ -12,7 +12,7 @@ const FEATURE_CARD_STAGGER_DELAY_MS = 120;
 
 const FeatureCard = memo((props: IFeatureCardProps) => {
     const { ref: firstCardRef, inView } = useInView<HTMLDivElement>({
-        rootMargin: "0px 0px -40% 0px",
+        rootMargin: "0px 0px -10% 0px",
     });
 
     const animationStateClass = inView

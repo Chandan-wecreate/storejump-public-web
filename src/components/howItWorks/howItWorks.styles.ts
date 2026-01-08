@@ -1,5 +1,5 @@
 const howItWorksStyles = {
-    wrapper: "py-10 md:py-[70px] grid md:gap-[30px] gap-5 md:min-h-dvh md:grid-rows-[auto_1fr]",
+    wrapper: "py-10 md:py-[70px] grid md:gap-[30px] gap-5 md:grid-rows-[auto_1fr]",
     infoGrid: "grid pr-[30px] lg:pr-0",
     leftOpacityBase: "transition-opacity duration-300 ease-out",
     leftOpacityHalf: "opacity-50",
@@ -9,6 +9,7 @@ const howItWorksStyles = {
     cardsWrapper: "grid grid-cols-3 gap-[30px] md:gap-[45px] md:self-center",
     card: "grid auto-rows-auto gap-[30px]",
     scrollCard: "will-change-transform",
+    revealCardBase: "opacity-40 grayscale will-change-[opacity,filter]",
     imageWrapper: "lg:px-5 rounded-[20px] bg-ghostWhite items-start will-change-[height_,_opacity] overflow-hidden transition-[height,opacity] duration-300 ease-out card-img relative w-full lg:h-[300px] xl:h-[400px] md:h-[200px] md:p-[15px]",
     img: "w-full h-full",
     cardInfoWrapper: "grid auto-rows-auto gap-2.5 lg:gap-[15px]",

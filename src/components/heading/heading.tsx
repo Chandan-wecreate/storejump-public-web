@@ -45,8 +45,9 @@ const AnimatedHighlightedText = memo(({ text }: { text: string }) => {
     );
 });
 
-const DelayedDescription = memo(({ text, isLong }: { text: string; isLong?: boolean }) => {
-    const [isVisible, setIsVisible] = useState(false);
+const DelayedDescription = memo((props: { text: string; isLong?: boolean; noTransition?: boolean }) => {
+    const { text, isLong = false, noTransition } = props;
+    const [isVisible, setIsVisible] = useState(noTransition ? true : false);
     const [measuredMaxHeight, setMeasuredMaxHeight] = useState("0px");
     const paragraphRef = useRef<HTMLParagraphElement>(null);
 
@@ -72,7 +73,7 @@ const DelayedDescription = memo(({ text, isLong }: { text: string; isLong?: bool
         <p
             ref={paragraphRef}
             className={`${styles.description(false, !isLong)} ${styles.longDescriptionTransition} ${isVisible ? "opacity-100" : "opacity-0"}`}
-            style={{ maxHeight: isVisible ? measuredMaxHeight : "0px" }}
+            style={{ maxHeight: noTransition ? "auto" : isVisible ? measuredMaxHeight : "0px" }}
         >
             {text}
         </p>
@@ -80,7 +81,7 @@ const DelayedDescription = memo(({ text, isLong }: { text: string; isLong?: bool
 });
 
 const Heading = memo((props: IHeadingProps) => {
-    const { highlightedText, title, primary, className, description, descriptionClassName, longDescription } = props;
+    const { highlightedText, title, primary, className, description, noTransition, longDescription } = props;
 
     const formattedTitle = useMemo(() => {
         if (!highlightedText) {
@@ -121,8 +122,10 @@ const Heading = memo((props: IHeadingProps) => {
             <h3 className={styles.heading(primary)}>
                 {formattedTitle}
             </h3>
-            {description && <DelayedDescription key={description} text={description} />}
-            {longDescription && <DelayedDescription key={longDescription} text={longDescription} isLong />}
+            {description && <DelayedDescription key={description} text={description} noTransition={noTransition} />}
+            {longDescription &&
+                <DelayedDescription key={longDescription} text={longDescription} isLong noTransition={noTransition} />
+            }
         </div>
     );
 });

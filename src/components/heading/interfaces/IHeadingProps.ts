@@ -30,4 +30,5 @@ export default interface IHeadingProps {
     description?: string;
     descriptionClassName?: string;
     longDescription?: string;
+    noTransition?: boolean;
 }

@@ -17,9 +17,9 @@ const STAGGER_DELAY_MS = 90;
 const ECommercePlatforms = memo((props: ICardSectionData) => {
     const { cardSection } = props;
     const [rightSpacing, setRightSpacing] = useState(0);
-    const { ref: sectionRef, inView: cardsInView } = useInView<HTMLDivElement>({ once: false });
+    const { ref: sectionRef, inView: cardsInView } = useInView<HTMLDivElement>({ once: true, rootMargin: "0px 0px -20% 0px" });
     const { ref: headingRef, inView: headingInView } = useInView<HTMLDivElement>({
-        once: false,
+        once: true,
         rootMargin: "0px 0px 0px 0px",
     });
 

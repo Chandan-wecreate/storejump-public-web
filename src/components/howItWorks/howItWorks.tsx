@@ -1,6 +1,7 @@
 "use client";
 
-import { memo, useCallback, useMemo, useRef } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import gsap from "gsap";
 
 import CardStack from "@/components/cardStack/cardStack";
 import Container from "@/components/container/container";
@@ -9,33 +10,63 @@ import ICardSectionData from "@/types/ICardSectionData";
 import ImageComponent from "@/components/imageComponent/imageComponent";
 import useBreakpoints from "@/hooks/useBreakpoints";
 import useInView from "@/hooks/useInView";
-import usePinnedStaggerReveal from "@/hooks/usePinnedStaggerReveal";
 
 import styles from "@/components/howItWorks/howItWorks.styles";
 
-const HOW_IT_WORKS_SCROLL_PER_ITEM_PX = 420;
-const HOW_IT_WORKS_CARD_STAGGER = 1;
-const HOW_IT_WORKS_CARD_FROM_Y = 36;
+const HOW_IT_WORKS_REVEAL_STAGGER = 1;
+const HOW_IT_WORKS_REVEAL_DURATION = 0.75;
+const HOW_IT_WORKS_REVEAL_FROM_Y = 14;
 
 const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
     const { card, heading } = cardSection;
     const breakpoints = useBreakpoints();
     const isMobile = breakpoints.MD;
     const sectionRef = useRef<HTMLDivElement>(null);
+    const hasRevealedRef = useRef(false);
 
     const { ref: headingRef, inView: headingInView } = useInView<HTMLDivElement>({
-        once: false,
+        once: true,
         rootMargin: "0px 0px 0px 0px",
     });
 
-    usePinnedStaggerReveal(sectionRef, {
-        enabled: !isMobile,
-        itemSelector: "[data-howitworks-card]",
-        scrollPerItemPx: HOW_IT_WORKS_SCROLL_PER_ITEM_PX,
-        stagger: HOW_IT_WORKS_CARD_STAGGER,
-        fromVars: { y: HOW_IT_WORKS_CARD_FROM_Y },
-        toVars: { y: 0 },
+    const { ref: revealRef, inView: revealInView } = useInView<HTMLDivElement>({
+        once: true,
+        rootMargin: "0px 0px -70% 0px",
+        threshold: 0,
     });
+
+    useEffect(() => {
+        if (!revealInView) return;
+        if (hasRevealedRef.current) return;
+
+        const container = sectionRef.current;
+        if (!container) return;
+
+        const items = Array.from(container.querySelectorAll("[data-howitworks-card]"));
+        if (items.length === 0) return;
+
+        hasRevealedRef.current = true;
+
+        const ctx = gsap.context(() => {
+            gsap.set(items, {
+                opacity: 0.4,
+                filter: "grayscale(1)",
+                y: HOW_IT_WORKS_REVEAL_FROM_Y,
+            });
+
+            gsap.to(items, {
+                opacity: 1,
+                filter: "grayscale(0)",
+                y: 0,
+                duration: HOW_IT_WORKS_REVEAL_DURATION,
+                stagger: HOW_IT_WORKS_REVEAL_STAGGER,
+                ease: "power2.out",
+                overwrite: true,
+            });
+        }, container);
+
+        return () => ctx.revert();
+    }, [revealInView]);
 
     const cardWrapperClassName = useMemo(
         () => !isMobile ? styles.scrollCard : "",
@@ -46,7 +77,7 @@ const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
         <div
             key={idx}
             data-howitworks-card
-            className={cardWrapperClassName}
+            className={`${styles.revealCardBase} ${cardWrapperClassName}`}
         >
             <div className={mobile ? styles.carouselItem : styles.card}>
                 <div className={styles.imageWrapper}>
@@ -70,7 +101,13 @@ const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
 
     return (
         <Container>
-            <div className={styles.wrapper} ref={sectionRef}>
+            <div
+                className={styles.wrapper}
+                ref={(node) => {
+                    sectionRef.current = node;
+                    (revealRef as unknown as { current: HTMLDivElement | null }).current = node;
+                }}
+            >
                 <div className={styles.infoGrid}>
                     <div
                         ref={headingRef}

@@ -19,6 +19,7 @@ const WhatIsStoreJump = memo((props: ICardSectionData) => {
                             highlightedText={cardSection.heading.highlightedText}
                             title={cardSection.heading.title}
                             description={cardSection.heading.description}
+                            noTransition
                         />
                     </div>
                 </div>
