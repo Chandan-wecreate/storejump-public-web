@@ -36,7 +36,6 @@ const Header = memo(() => {
     const [isActive, setIsActive] = useState(false);
     const breakpoints = useBreakpoints();
     const [scrolled, setScrolled] = useState(false);
-    const [animateDesktopMenu, setAnimateDesktopMenu] = useState(false);
     const [animateMobileMenuItems, setAnimateMobileMenuItems] = useState(false);
 
     const menuItemBaseDelayMs = useMemo(() => MENU_ITEM_STAGGER_DELAY_MS, []);
@@ -56,11 +55,6 @@ const Header = memo(() => {
 
         container.addEventListener("scroll", handleScroll);
         return () => container.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    useEffect(() => {
-        const timeoutId = setTimeout(() => setAnimateDesktopMenu(true), MENU_ITEM_START_DELAY_MS);
-        return () => clearTimeout(timeoutId);
     }, []);
 
     useEffect(() => {
@@ -108,12 +102,7 @@ const Header = memo(() => {
                             {
                                 menuItems.map((item, index) =>
                                     <Link href={item.href} className={commonStyles.link(true)} key={index}>
-                                        <span
-                                            className={`${styles.menuItemAnimationBase} ${
-                                                animateDesktopMenu ? styles.menuItemVisible : styles.menuItemPreVisible
-                                            }`}
-                                            style={{ transitionDelay: `${index * menuItemBaseDelayMs}ms` }}
-                                        >
+                                        <span style={{ transitionDelay: `${index * menuItemBaseDelayMs}ms` }}>
                                             {item.title}
                                         </span>
                                     </Link>
@@ -141,13 +130,12 @@ const Header = memo(() => {
                         menuItems.map((item, index) =>
                             <Link href={item.href} className={commonStyles.link(true)} key={index}>
                                 <span
-                                    className={`${styles.menuItemAnimationBase} ${
-                                        isActive
-                                            ? animateMobileMenuItems
-                                                ? styles.menuItemVisible
-                                                : styles.menuItemPreVisible
-                                            : styles.menuItemHidden
-                                    }`}
+                                    className={`${styles.menuItemAnimationBase} ${isActive
+                                        ? animateMobileMenuItems
+                                            ? styles.menuItemVisible
+                                            : styles.menuItemPreVisible
+                                        : styles.menuItemHidden
+                                        }`}
                                     style={{ transitionDelay: `${index * menuItemBaseDelayMs}ms` }}
                                 >
                                     {item.title}

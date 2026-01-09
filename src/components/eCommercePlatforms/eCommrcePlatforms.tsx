@@ -12,7 +12,7 @@ import useInView from "@/hooks/useInView";
 import styles from "@/components/eCommercePlatforms/eCommercePlatforms.styles";
 
 const spacing = 50;
-const STAGGER_DELAY_MS = 90;
+const STAGGER_DELAY_MS = 200;
 
 const ECommercePlatforms = memo((props: ICardSectionData) => {
     const { cardSection } = props;
@@ -44,8 +44,8 @@ const ECommercePlatforms = memo((props: ICardSectionData) => {
                 <div
                     ref={headingRef}
                     className={
-                        `${styles.cardAnimationBase} ${headingInView ? styles.cardAnimationVisible : styles.cardAnimationHidden
-                        }`
+                        `${styles.cardAnimationBase} 
+                        ${headingInView ? styles.cardAnimationVisible : styles.cardAnimationHidden}`
                     }
                 >
                     <Heading highlightedText={cardSection.heading.highlightedText} title={cardSection.heading.title} />
