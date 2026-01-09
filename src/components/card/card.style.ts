@@ -1,6 +1,7 @@
 const cardStyles = {
     card: (showCount = false) => `${showCount ? "p-[25px] lg:p-[30px]" : "px-5 pt-5 lg:px-[30px] lg:pt-[30px]"}
-    rounded-[20px] flex flex-col gap-[15px] md:gap-5 lg:w-full w-[320px] h-full`,
+    rounded-[20px] w-[400px] flex flex-col gap-[15px] md:gap-5 max-w-[260px] lg:max-w-[400px] max-h-[330px]
+    lg:max-h-[490px] h-full`,
     cardInner: (showCount = false) => `flex flex-col ${showCount ? "gap-[30px]" : "gap-[5px] md:gap-2.5"}`,
     logo: "h-[36px] w-[50px] md:h-[50px]",
     title: "text-lg lg:text-[28px] lg:leading-[34px] font-semibold pr-[25px]",
