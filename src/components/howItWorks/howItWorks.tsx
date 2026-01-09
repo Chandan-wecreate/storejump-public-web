@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
 
 import CardStack from "@/components/cardStack/cardStack";
@@ -36,7 +36,7 @@ const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
     });
 
     useEffect(() => {
-        if (!revealInView) return;
+        if (!revealInView || isMobile) return;
         if (hasRevealedRef.current) return;
 
         const container = sectionRef.current;
@@ -66,25 +66,29 @@ const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
         }, container);
 
         return () => ctx.revert();
-    }, [revealInView]);
+    }, [isMobile, revealInView]);
+
+    useEffect(() => {
+        isMobile && (hasRevealedRef.current = false);
+    }, [isMobile]);
 
     const cardWrapperClassName = useMemo(
         () => !isMobile ? styles.scrollCard : "",
         [isMobile]
     );
 
-    const renderCard = useCallback((mobile: boolean) => card.map((c, idx) =>
+    const renderCard = useMemo(() => card.map((c, idx) =>
         <div
             key={idx}
             data-howitworks-card
-            className={`${styles.revealCardBase} ${cardWrapperClassName}`}
+            className={`${!isMobile ? styles.revealCardBase : ""} ${cardWrapperClassName}`}
         >
-            <div className={mobile ? styles.carouselItem : styles.card}>
+            <div className={isMobile ? styles.carouselItem : styles.card}>
                 <div className={styles.imageWrapper}>
                     <ImageComponent {...c.img} className={styles.img} />
                 </div>
                 <div className={styles.cardInfoWrapper}>
-                    {mobile
+                    {isMobile
                         ? <>
                             <h3 className={styles.cardTitle(false)}>{c.title}</h3>
                             <h3 className={`${styles.cardTitle(isMobile)}`}>
@@ -121,8 +125,8 @@ const HowItWorks = memo(({ cardSection }: ICardSectionData) => {
                 </div>
                 {
                     isMobile
-                        ? <CardStack>{renderCard(true)}</CardStack>
-                        : <div className={styles.cardsWrapper}>{renderCard(false)}</div>
+                        ? <CardStack>{renderCard}</CardStack>
+                        : <div className={styles.cardsWrapper}>{renderCard}</div>
                 }
             </div>
         </Container>
